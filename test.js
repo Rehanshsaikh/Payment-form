@@ -55,8 +55,9 @@ function checkAllField(event){
     
     cv = (Math.floor(Math.random()*8)+1) + "" + (Math.floor(Math.random()*8)+1) + "" + (Math.floor(Math.random()*8)+1)
     
-    
+    let isSuccess = false
     if(isCredit){
+        document.getElementById("card-error").classList.remove("card_success")
         if(document.getElementById("cardnumber").value.length != 16 || !document.getElementById("cardnumber").value.match(/^[0-9]+$/)){
             document.getElementById("card-error").innerHTML = "Card Number must contain 16 numberic equal number"
             
@@ -69,10 +70,12 @@ function checkAllField(event){
             
             document.getElementById("card-error").innerHTML = "Successfully Validate, Your CVV is " + cv
             document.getElementById("card-error").classList.add("card_success")
+            isSuccess = true
         }
     }
-
+    
     if(isUPI){
+        document.getElementById("upi-error").classList.remove("card_success")
         let arr = [8254637019, 9043681072, 7531208496, 6079356418, 2897503461, 4563872109, 3974610825, 7382965041, 2540187693,  9682735041]
         if(!arr.includes(Number(document.getElementById("upinumber").value))){
             document.getElementById("upi-error").innerHTML = "Please fill the correnct number"
@@ -81,19 +84,21 @@ function checkAllField(event){
         }else{
             document.getElementById("upi-error").innerHTML = "Successfully Validate, Your CVV is " + cv
             document.getElementById("upi-error").classList.add("card_success")
+            isSuccess = true
         }
     }
     
     if(isAccount){
+        document.getElementById("account-error").classList.remove("card_success")
         if(!document.getElementById("accountname").value  || !document.getElementById("accountname").value.match(/^[A-Za-z ]+$/)){
             document.getElementById("account-error").innerHTML = "Please fill the correnct Name"
-
+            
         }else if(!document.getElementById("accountnumber").value  || document.getElementById("accountnumber").value.length != 16 || !document.getElementById("accountnumber").value.match(/^[0-9]+$/)){
             document.getElementById("account-error").innerHTML = "Please fill the correnct Account Number"
-
+            
         }else if(document.getElementById("reaccountnumber").value != document.getElementById("accountnumber").value){
             document.getElementById("account-error").innerHTML = "Please reenter the correct Account Number"
-
+            
         }else if(!document.getElementById("IFSC").value  || !document.getElementById("IFSC").value.match(/^[A-Za-z0-9]+$/)){
             document.getElementById("account-error").innerHTML = "Please enter the correct IFSC"
         }else if(!document.getElementById("branchName").value  || !document.getElementById("branchName").value.match(/^[A-Za-z ]+$/)){
@@ -101,11 +106,15 @@ function checkAllField(event){
         }else{
             document.getElementById("account-error").innerHTML = "Successfully Validate, Your CVV is " + cv
             document.getElementById("account-error").classList.add("card_success")
+            isSuccess = true
         }
     }
     
     
     event.preventDefault()
+    if(isSuccess){
+        return isSuccess
+    }
 
 }
 let count = 0
@@ -118,7 +127,7 @@ function checkCV(event){
         if(cvNumber != cv){
             document.getElementById("card-error").innerHTML = "CV Number must be match"
             document.getElementById("card-error").classList.remove("card_success")
-        }else{
+        }else if(checkAllField(event)){
             document.getElementById("list").style.display = "block"
             let row = document.createElement("tr")
             let td1 = document.createElement("td")
@@ -150,7 +159,7 @@ function checkCV(event){
         if(cvNumber != cv){
             document.getElementById("upi-error").innerHTML = "Please fill the correct cv number"
             document.getElementById("upi-error").classList.remove("card_success")
-        }else{
+        }else if(checkAllField(event)){
             document.getElementById("list").style.display = "block"
             let row = document.createElement("tr")
             let td1 = document.createElement("td")
@@ -171,6 +180,7 @@ function checkCV(event){
                                                         </div>`
             count++
             document.getElementById("upi-error").innerHTML = "Your payment has made successfully"     
+            document.getElementById("form2").firstElementChild.reset()
         }
     }
 
@@ -179,7 +189,7 @@ function checkCV(event){
         if(cvNumber != cv){
             document.getElementById("account-error").innerHTML = "Please fill the correct cv number"
             document.getElementById("account-error").classList.remove("card_success")
-        }else{
+        }else if(checkAllField(event)){
             document.getElementById("list").style.display = "block"
             let row = document.createElement("tr")
             let td1 = document.createElement("td")
@@ -202,20 +212,14 @@ function checkCV(event){
                                                         </div>`
             count++
             document.getElementById("account-error").innerHTML = "Your payment has made successfully"
+            document.getElementById("form3").firstElementChild.reset()
         }    
     }
 
     
     event.preventDefault()
+    
 
-    
-    
-    
-    
-    
-    
-    document.getElementById("form2").firstElementChild.reset()
-    document.getElementById("form3").firstElementChild.reset()
     let date1 = new Date(); // now
     let input = document.getElementById("cardexpiry");
     input.valueAsDate = new Date(Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()));
