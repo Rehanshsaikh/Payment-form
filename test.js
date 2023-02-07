@@ -5,16 +5,11 @@ let input = document.getElementById("cardexpiry");
 input.valueAsDate = new Date(Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()));
 console.log(date1)
 
-
-
-
-
-
 function change(){
     document.getElementById("div1").style.display="block"
     console.log("rehan")
+    
 }
-
 
 let isCredit = ""
 let isUPI = ""
@@ -25,10 +20,10 @@ function form1(){
     document.getElementById("form3").style.display = "none"
     isCredit = true
     isUPI = false
-    isAccount = false
-        
-            
+    isAccount = false   
+    document.getElementById("list").style.display="block"                
 }
+
 function form2(){
     document.getElementById("form1").style.display = "none"
     document.getElementById("form2").style.display = "block"
@@ -36,9 +31,9 @@ function form2(){
     isCredit = false
     isUPI = true
     isAccount = false
-
-        console.log("form2")
+    document.getElementById("list").style.display="block"
 }
+
 function form3(){
     document.getElementById("form1").style.display = "none"
     document.getElementById("form2").style.display = "none"
@@ -46,16 +41,14 @@ function form3(){
     isCredit = false
     isUPI = false
     isAccount = true
-        console.log("form3")
-
-        
+    document.getElementById("list").style.display="block"
 }
+
 let cv = ""
 function checkAllField(event){
-    
-    cv = (Math.floor(Math.random()*8)+1) + "" + (Math.floor(Math.random()*8)+1) + "" + (Math.floor(Math.random()*8)+1)
-    
+    cv = (Math.floor(Math.random()*8)+1) + "" + (Math.floor(Math.random()*8)+1) + "" + (Math.floor(Math.random()*8)+1)    
     let isSuccess = false
+
     if(isCredit){
         document.getElementById("card-error").classList.remove("card_success")
         if(document.getElementById("cardnumber").value.length != 16 || !document.getElementById("cardnumber").value.match(/^[0-9]+$/)){
@@ -108,38 +101,23 @@ function checkAllField(event){
             document.getElementById("account-error").classList.add("card_success")
             isSuccess = true
         }
-    }
-    
-    
+    } 
     event.preventDefault()
     if(isSuccess){
         return isSuccess
     }
-
 }
 let count = 0
 function checkCV(event){
-
-    
-
     if(isCredit){
         let cvNumber = document.getElementById("cv").value
         if(cvNumber != cv){
             document.getElementById("card-error").innerHTML = "CV Number must be match"
             document.getElementById("card-error").classList.remove("card_success")
         }else if(checkAllField(event)){
-            document.getElementById("list").style.display = "block"
-            let row = document.createElement("tr")
-            let td1 = document.createElement("td")
-            td1.innerHTML = document.getElementById("cardname").value
-            row.append(td1)
-            let td2 = document.createElement("td")
-            td2.innerHTML = document.getElementById("Credit").innerHTML
-            row.append(td2)
-            row.innerHTML += `<td><button onclick="detail(this)" id="count${count}" class="btn btn-sm btn-secondary">Full Detail</button class="btn btn-secondary">
-            </td>`
-            row.innerHTML += `<td><button onclick="rem(this)" class="btn btn-sm btn-secondary">Remove</button class="btn btn-secondary"></td>`
-            document.getElementById("table").append(row)
+
+            createData("cardname", "Credit", count);
+            
             let arr = Array.from(document.querySelectorAll(".form1"))
             document.querySelector("div").innerHTML += `<div class="all count${count}" style="display: none;">
                                                             Card Number : ${arr[0].value} <br>
@@ -160,18 +138,8 @@ function checkCV(event){
             document.getElementById("upi-error").innerHTML = "Please fill the correct cv number"
             document.getElementById("upi-error").classList.remove("card_success")
         }else if(checkAllField(event)){
-            document.getElementById("list").style.display = "block"
-            let row = document.createElement("tr")
-            let td1 = document.createElement("td")
-            td1.innerHTML = document.getElementById("upiname").value 
-            row.append(td1)
-            let td2 = document.createElement("td")
-            td2.innerHTML = document.getElementById("UPI").innerHTML
-            row.append(td2)
-            row.innerHTML += `<td><button onclick="detail(this)" id="count${count}" class="btn btn-sm btn-secondary">Full Detail</button class="btn btn-secondary">
-            </td>`
-            row.innerHTML += `<td><button onclick="rem(this)" class="btn btn-sm btn-secondary">Remove</button class="btn btn-secondary"></td>`
-            document.getElementById("table").append(row)
+            createData("upiname", "UPI", count);
+            
             let arr = Array.from(document.querySelectorAll(".form2"))
             document.querySelector("div").innerHTML += `<div class="all count${count}" style="display: none;">
                                                             UPI Number : ${arr[0].value} <br>
@@ -190,18 +158,9 @@ function checkCV(event){
             document.getElementById("account-error").innerHTML = "Please fill the correct cv number"
             document.getElementById("account-error").classList.remove("card_success")
         }else if(checkAllField(event)){
-            document.getElementById("list").style.display = "block"
-            let row = document.createElement("tr")
-            let td1 = document.createElement("td")
-            td1.innerHTML = document.getElementById("accountname").value 
-            row.append(td1)
-            let td2 = document.createElement("td")
-            td2.innerHTML = document.getElementById("account").innerHTML
-            row.append(td2)
-            row.innerHTML += `<td><button onclick="detail(this)" id="count${count}" class="btn btn-sm btn-secondary">Full Detail</button class="btn btn-secondary">
-            </td>`
-            row.innerHTML += `<td><button onclick="rem(this)" class="btn btn-sm btn-secondary">Remove</button class="btn btn-secondary"></td>`
-            document.getElementById("table").append(row)
+
+            createData("accountname", "account", count);
+            
             let arr = Array.from(document.querySelectorAll(".form3"))
             document.querySelector("div").innerHTML += `<div class="all count${count}" style="display: none;">
                                                             Name : ${arr[0].value} <br>
@@ -214,37 +173,50 @@ function checkCV(event){
             document.getElementById("account-error").innerHTML = "Your payment has made successfully"
             document.getElementById("form3").firstElementChild.reset()
         }    
-    }
-
-    
+    } 
     event.preventDefault()
-    
-
     let date1 = new Date(); // now
     let input = document.getElementById("cardexpiry");
     input.valueAsDate = new Date(Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()));
-    console.log(date1)
-
-    
+    console.log(date1)   
 }
 
-function rem(it){
-    
+function rem(it){  
     let className =it.parentElement.previousElementSibling.firstElementChild.getAttribute("id")
     document.getElementsByClassName(className)[0].remove()
     it.parentElement.parentElement.remove()
 }
 
 
-function detail(it){
-    //let div = document.getElementsByClassName(it.getAttribute("id"))[1]
+function detail(it){ 
     let arr = Array.from(document.getElementsByClassName("all"))
-    console.log(arr)
     for(let el of arr){
         el.style.display = "none"
-        console.log(el)
     }
     let className =  it.getAttribute("id")
     document.getElementsByClassName(className)[0].style.display = "Block";
-    //div.style.display = "block"
 }
+
+function createData(name, method, sum){
+    document.getElementById("list").style.display = "block"
+    let row = document.createElement("tr")
+    let td1 = document.createElement("td")
+    td1.innerHTML = document.getElementById(name).value 
+    row.append(td1)
+    let td2 = document.createElement("td")
+    td2.innerHTML = document.getElementById(method).innerHTML
+    row.append(td2)
+    row.innerHTML += `<td><button onclick="detail(this)" id="count${sum}" class="btn btn-sm btn-secondary">Full Detail</button class="btn btn-secondary">
+    </td>`
+    row.innerHTML += `<td><button onclick="rem(this)" class="btn btn-sm btn-secondary">Remove</button class="btn btn-secondary"></td>`
+    document.getElementById("table").append(row)
+}
+
+
+
+
+
+
+
+
+
